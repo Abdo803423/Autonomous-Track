@@ -1,34 +1,33 @@
 
-### **Concept 7: Access Specifiers (Public, Private, Protected)**
+# Concept 7: Access Specifiers (Public, Private, Protected)
 
-#### **1. Deep Explanation (The Logic)**
-
+## 1. Deep Explanation (The Logic)
 In OOP, we don't want every part of the code to touch every variable. If a variable is critical (like the robot's main voltage), we want to lock it away so no one changes it accidentally.
 
-Access Specifiers are keywords that set the **Visibility** of class members:
+**Access Specifiers** are keywords that set the **Visibility** of class members:
+
+
 
 1.  **`public` (The Storefront):**
-      * **Who can access?** Everyone. The main program, other classes, anyone.
-      * **Usage:** This is the "User Interface." Functions like `startEngine()` or `getSpeed()`.
+    * **Who can access?** Everyone. The main program, other classes, anyone.
+    * **Usage:** This is the "User Interface." Functions like `startEngine()` or `getSpeed()`.
 2.  **`private` (The Engine Room):**
-      * **Who can access?** Only the class itself.
-      * **Usage:** Internal variables and logic. For example, the specific voltage on Pin 13. The user shouldn't touch this directly; they should use a Public function to request a change.
+    * **Who can access?** Only the class itself.
+    * **Usage:** Internal variables and logic. For example, the specific voltage on Pin 13. The user shouldn't touch this directly; they should use a Public function to request a change.
 3.  **`protected` (The Family Secret):**
-      * **Who can access?** The class itself **AND** any class that Inherits from it (Child classes).
-      * **Usage:** Used in Inheritance. It’s too dangerous to be Public, but we want our "Children" classes to use it.
+    * **Who can access?** The class itself **AND** any class that Inherits from it (Child classes).
+    * **Usage:** Used in Inheritance. It’s too dangerous to be Public, but we want our "Children" classes to use it.
 
------
+---
 
-#### **2. Why do we use it? (Encapsulation)**
+## 2. Why do we use it? (Encapsulation)
+* **Safety:** Imagine a `Motor` class. If the internal variable `pwm_value` is `public`, a lazy programmer might write `motor.pwm_value = 99999;` in `main()`, burning the motor.
+* **Encapsulation:** If we make `pwm_value` `private`, the programmer is forced to use `motor.setSpeed(100)`. Inside `setSpeed`, we write logic: *"If value > 255, set to 255."* This protects the hardware.
 
-  * **Safety:** Imagine a `Motor` class. If the internal variable `pwm_value` is `public`, a lazy programmer might write `motor.pwm_value = 99999;` in `main()`, burning the motor.
-  * **Encapsulation:** If we make `pwm_value` `private`, the programmer is forced to use `motor.setSpeed(100)`. Inside `setSpeed`, we write logic: "If value \> 255, set to 255." This protects the hardware.
+---
 
------
-
-#### **3. Syntax & Rules**
-
-Inside a class, you group code under these labels.
+## 3. Syntax & Rules
+Inside a class, you group code under these labels:
 
 ```cpp
 class Robot {
@@ -49,11 +48,11 @@ private:
         internal_voltage = 12.0; // OK: We are inside the class
     }
 };
-```
+````
 
 -----
 
-#### **4. The Trap: "The Lazy Public"**
+## 4\. The Trap: "The Lazy Public" ⚠️
 
 Beginners often make everything `public` because "it's easier."
 
@@ -64,7 +63,7 @@ Beginners often make everything `public` because "it's easier."
 
 -----
 
-#### **5. Code Example**
+## 5\. Code Example
 
 ```cpp
 #include <iostream>
@@ -113,18 +112,18 @@ int main() {
 
 -----
 
-#### **6. ROS2 Context: "Node Privacy"**
+## 6\. ROS2 Context: "Node Privacy"
 
 In ROS2, we write Nodes as classes.
 
   * **Private Members:** Variables like `rclcpp::Publisher` and `rclcpp::Subscription` are almost always **Private**.
       * *Why?* No other part of the code needs to manually touch the publisher pointer. They just need the node to do its job.
-  * **Public Members:** The Constructor (to start the node) and maybe some "Getter" functions.
+  * **Public Members:** The **Constructor** (to start the node) and maybe some "Getter" functions.
   * **Protected:** Rarely used unless you are building a complex library of Robots where a `FlyingRobot` inherits from a generic `RobotBase`.
 
 -----
 
-#### **7. Task: The "Bank Vault"**
+## 7\. Task: The "Bank Vault" ✅
 
 **Scenario:**
 You are creating a class for a Bank Account (or a Robot's Power Budget).
@@ -134,13 +133,16 @@ You are creating a class for a Bank Account (or a Robot's Power Budget).
 1.  Create a class `Account`.
 2.  **Private Variable:** `double balance` (Initialize to 0.0).
 3.  **Public Method:** `void deposit(double amount)`.
-      * Logic: If amount \> 0, add to balance. Else, print "Invalid amount".
+      * *Logic:* If amount \> 0, add to balance. Else, print "Invalid amount".
 4.  **Public Method:** `double withdraw(double amount)`.
-      * Logic: If amount \<= balance, subtract and return the amount. Else, print "Insufficient funds" and return 0.
-5.  **The Logic Puzzle (Main):**
-      * Create an `Account` object.
-      * **Try to cheat:** Write `my_account.balance = 1000000;`.
-      * **Observe:** The compiler will yell at you (Error: `balance` is private).
-      * **Fix:** Use `deposit(100)` and `withdraw(50)` to interact with the object legally.
+      * *Logic:* If amount \<= balance, subtract and return the amount. Else, print "Insufficient funds" and return 0.
 
-**Goal:** This proves that `private` prevents "hacking" or accidental modification of internal data.
+**The Logic Puzzle (Main):**
+
+1.  Create an `Account` object.
+2.  **Try to cheat:** Write `my_account.balance = 1000000;`.
+3.  **Observe:** The compiler will yell at you (Error: `balance` is private).
+4.  **Fix:** Use `deposit(100)` and `withdraw(50)` to interact with the object legally.
+
+*Goal: This proves that `private` prevents "hacking" or accidental modification of internal data.*
+
