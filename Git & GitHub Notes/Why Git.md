@@ -102,7 +102,6 @@ If you ever get stuck or forget a command, use the built-in manuals:
 | `git --help` | Lists the most common commands. |
 | `git help <command>` | Opens the manual for a specific command (e.g., `git help init`). |
 
-```
 
 ***
 
@@ -112,4 +111,4 @@ If you ever get stuck or forget a command, use the built-in manuals:
 3.  **Editor:** The transcript used `notepad` or `atom`. I included the command for Notepad as the default since it's universally available on Windows, but noted they can change it.
 
 **Would you like to proceed to the next transcript, or do you want to add instructions on how to set up an SSH key (which is often the next hurdle for teams)?**
-```
+
